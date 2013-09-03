@@ -1,0 +1,24 @@
+# Tell the user project where to find GEL's header and libraries
+SET(GEL_INCLUDE_DIRS
+  "@GEL_SOURCE_DIR@/src"
+  )
+
+SET(GEL_LIBRARY_DIRS
+  "@GEL_BINARY_DIR@/lib"
+  )
+
+# Tell the user project where to find GEL's build settings
+# and library dependencies
+SET(GEL_BUILD_SETTINGS_FILE
+  "@GEL_BINARY_DIR@/GELBuildSettings.cmake"
+  )
+
+INCLUDE(  
+  "@GEL_BINARY_DIR@/GELLibraryDepends.cmake"
+  )
+
+# Tell the user project where to find the use file
+# this file uses the above settings to configure the user project
+SET(GEL_USE_FILE
+  "@GEL_BINARY_DIR@/GELUse.cmake"
+  )

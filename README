@@ -1,0 +1,47 @@
+GEL
+GEometry and Linear algebra 
+or
+Graphics Elements Library
+
+So, GEL is a small library with a good support for 2,3,4 D vectors, simple linear system solving (via Lapack), Mesh representation of surfaces, and the volume representation. There are also several other things some of which pertain to simple user interfaces. For instance, GEL contains a console library.
+
+DOCUMENTATION
+---
+Some installation instructions below. But for more documentation please see the doc directory. There is a doxygen script for creating a reference manual and a latex file intro.tex which explains the basics. Please doxygen or pdflatex your documentation. A license is also found in the intro document.
+
+Building on XCode/OSX
+---
+
+An XCode project has been created and is found in the root directory. The XCode project produces a framework for the GEL library and compiles all the applications.
+
+CMake
+---
+
+On other platforms, you may need to install GLUT and Lapack. Then CMake can be used
+to produce build files. Some of the example programs have hardcoded paths to files in the data directory.
+For this reason you need to use the GEL directory as your build directory. This may be fixed in later
+releases.
+
+Glut is available here:
+
+http://user.xmission.com/~nate/glut.html
+
+Direct link:
+
+http://user.xmission.com/~nate/glut/glut-3.7.6-bin.zip
+
+Lapack you can find here:
+
+http://www.netlib.org/clapack/
+
+Direct link:
+
+http://www.netlib.org/clapack/CLAw32.zip
+
+running CMake configuration you will need to set
+
+INCLUDE_GLUT - set it to the directory containing GL/glut.h You may need to create the GL directory.
+LIB_LAPACK - set it to the actual file location of clapack.lib
+LIB_GLUT - set it to the actual file location of glut32.lib
+
+Note: You will also need to put glut32.dll in the path of your executables.
