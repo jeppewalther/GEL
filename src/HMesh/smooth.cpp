@@ -71,7 +71,7 @@ namespace HMesh
                 FaceID fn = wv.face();
                 if(fn != InvalidFaceID && touched[fn] != touched[f]){
                     Vec3d norm = normal(m, fn);
-                    if(!isnan(sqr_length(norm)))
+                    if(!CGLA::isnan(sqr_length(norm)))
                         nbrs.push_back(norm);
                     else
                         cout << "bad normal detected" << endl;

@@ -25,35 +25,59 @@ source_group(LinAlg FILES ${LinAlg})
 ADD_LIBRARY(GEL ${CGLA} ${HMesh} ${GL} ${GLGraphics} ${Geometry} ${Util} ${LinAlg}) 
 
 IF(APPLE)
-SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_PRODUCT_NAME GEL)
-FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
-FIND_LIBRARY(GLUT_LIBRARY GLUT)
-FIND_LIBRARY(vecLib_LIBRARY vecLib)
-SET(EXTRA_LIBS ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${GLUT_LIBRARY} ${vecLib_LIBRARY})
-TARGET_LINK_LIBRARIES(GEL ${EXTRA_LIBS})
-SET_TARGET_PROPERTIES(GEL PROPERTIES LINKER_LANGUAGE CXX)
-SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD c++0x)
-SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
-ELSE(APPLE)
+    SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_PRODUCT_NAME GEL)
+    FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+    FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
+    FIND_LIBRARY(GLUT_LIBRARY GLUT)
+    FIND_LIBRARY(vecLib_LIBRARY vecLib)
+    SET(EXTRA_LIBS ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${GLUT_LIBRARY} ${vecLib_LIBRARY})
+    TARGET_LINK_LIBRARIES(GEL ${EXTRA_LIBS})
+    SET_TARGET_PROPERTIES(GEL PROPERTIES LINKER_LANGUAGE CXX)
+    SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD c++0x)
+    SET_TARGET_PROPERTIES(GEL PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
 
-set(DEPENDENCY_DIRS "lib")
-set(INCLUDE_DIRS "include")
+    # Set flags for CLang/C++11
+    if (("${CMAKE_GENERATOR}" MATCHES "Unix Makefiles") AND APPLE)
+           set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+    endif ()
 
-# Make sure we have the libraries
-find_library(LIB_GLUT glut32 ${DEPENDENCY_DIRS})
-find_library(LIB_LAPACK clapack ${DEPENDENCY_DIRS})
+ENDIF()
 
-# Include directories for dependencies
-find_path(INCLUDE_GLUT GL/glut.h ${INCLUDE_DIRS})
-include_directories(${INCLUDE_GLUT})
-TARGET_LINK_LIBRARIES(GEL ${LIB_LAPACK} ${LIB_GLUT})
-ENDIF(APPLE)
+# Set flags for GNUGCC/C++11 -- Propably Linux
+IF(CMAKE_COMPILER_IS_GNUCC)
+    #Set at module path.
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
-# Set flags for CLang/C++11
-if (("${CMAKE_GENERATOR}" MATCHES "Unix Makefiles") AND APPLE)
-   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
-endif ()
+    # Make sure we have the libraries
+    find_package(OpenGL REQUIRED)
+    find_package(GLUT REQUIRED)
+    find_package(Lapack REQUIRED)
+
+    # Include directories for dependencies
+    find_path(INCLUDE_GLUT GL/glut.h ${INCLUDE_DIRS})
+    include_directories(${INCLUDE_GLUT})
+
+    #Link libs
+    TARGET_LINK_LIBRARIES(GEL ${LAPACK_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ENDIF()
+
+
+IF(WIN32)
+    set(DEPENDENCY_DIRS "lib")
+    set(INCLUDE_DIRS "include")
+
+    # Make sure we have the libraries
+    find_library(LIB_GLUT glut32 ${DEPENDENCY_DIRS})
+    find_library(LIB_LAPACK clapack ${DEPENDENCY_DIRS})
+
+    # Include directories for dependencies
+    find_path(INCLUDE_GLUT GL/glut.h ${INCLUDE_DIRS})
+    include_directories(${INCLUDE_GLUT})
+    TARGET_LINK_LIBRARIES(GEL ${LIB_LAPACK} ${LIB_GLUT})
+ENDIF()
+
 
 # Remove all the deprecated stuff from VS2005
 IF(WIN32)

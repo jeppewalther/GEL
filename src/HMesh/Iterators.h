@@ -12,6 +12,7 @@
 #define __HMESH_ITERATORS_H__
 
 #include "ItemVector.h"
+#include <stddef.h>
 
 namespace HMesh
 {

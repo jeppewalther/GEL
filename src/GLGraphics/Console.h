@@ -23,6 +23,8 @@
 #include <memory> //unique_ptr
 #include <vector>
 #include <cassert>
+#include <stdexcept>
+
 
 namespace GLGraphics {
 

@@ -244,7 +244,7 @@ namespace HMesh
         // Compute the coefficients of the polynomial surface
         CVector x(3);
         x = LinearLSSolve(PMat,b);
-        if(isnan(x[0])) cout << __LINE__ << " " << PMat << b << endl ;
+        if(CGLA::isnan(x[0])) cout << __LINE__ << " " << PMat << b << endl ;
 
         // Finally compute the shape tensor from the coefficients
         // using the first and second fundamental forms.

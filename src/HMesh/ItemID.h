@@ -28,12 +28,12 @@ namespace HMesh
         bool operator ==(const ItemID& other) const { return index == other.index; }
         bool operator !=(const ItemID& other) const { return index != other.index; }
         bool operator <(const ItemID& other) const { return index < other.index; }
-		
-    private:
         typedef size_t IndexType;
-        static const IndexType INVALID_INDEX =  -1;
-
         IndexType index;
+
+    private:
+
+        static const IndexType INVALID_INDEX =  -1;
 
         explicit ItemID(IndexType _index): index(_index){}
 
